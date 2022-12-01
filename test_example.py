@@ -26,7 +26,7 @@ def power(x, y):
     return x**y
 
 def nstr(x):
-    return f'{x}'
+    return str(x)
 
 
 ###########
