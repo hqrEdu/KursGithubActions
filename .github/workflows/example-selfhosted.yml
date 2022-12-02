@@ -9,3 +9,5 @@ jobs:
     steps:
       - name: 'Just echo'
         run: echo 'Hello'
+      - name: 'Just grep'
+        run: grep 'hqr' /actionsDemo/file.txt
