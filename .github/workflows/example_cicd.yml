@@ -21,6 +21,7 @@ jobs:
     name: Deploy to Dev
     needs: [Build]
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     environment:
       name: Development
       url: ${{ steps.deploystep.outputs.deployment-url }}
@@ -34,6 +35,7 @@ jobs:
     name: Deploy to Staging 
     needs: [Build]
     runs-on: ubuntu-latest
+    if: github.event.ref == 'refs/heads/main'
     environment: 
       name: Staging
       url: ${{ steps.deploystep.outputs.deployment-url }}
