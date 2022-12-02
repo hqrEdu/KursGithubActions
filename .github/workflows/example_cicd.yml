@@ -1,0 +1,59 @@
+name: 'Przyklad procesu CICD'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Compile
+        run: echo Hello, world!
+
+  DeployDev:
+    name: Deploy to Dev
+    needs: [Build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    environment:
+      name: Development
+      url: ${{ steps.deploystep.outputs.deployment-url }}
+    steps:
+      - uses: hqrEdu/ExampleCompositeAction@main
+        id: deploystep
+        with:
+          deploy-name: dev
+
+  DeployStaging:
+    name: Deploy to Staging 
+    needs: [Build]
+    runs-on: ubuntu-latest
+    if: github.event.ref == 'refs/heads/main'
+    environment: 
+      name: Staging
+      url: ${{ steps.deploystep.outputs.deployment-url }}
+    steps:
+      - uses: hqrEdu/ExampleCompositeAction@main
+        id: deploystep
+        with:
+          deploy-name: staging
+
+  DeployProd:
+    name: Deploy to Production
+    needs: [DeployStaging]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Production
+      url: ${{ steps.deploystep.outputs.deployment-url }}
+    steps:
+      - uses: hqrEdu/ExampleCompositeAction@main
+        id: deploystep
+        with:
+          deploy-name: prod
