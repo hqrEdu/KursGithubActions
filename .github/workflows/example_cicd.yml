@@ -1,0 +1,29 @@
+name: 'Przyklad procesu CICD'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Compile
+        run: echo Hello, world!
+
+  DeployDev:
+    name: Deploy to Dev
+    needs: [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hqrEdu/ExampleCompositeAction@main
+        id: deploystep
+        with:
+          deploy-name: dev
+
