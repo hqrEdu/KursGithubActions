@@ -21,9 +21,37 @@ jobs:
     name: Deploy to Dev
     needs: [Build]
     runs-on: ubuntu-latest
+    environment:
+      name: Development
+      url: ${{ steps.deploystep.outputs.deployment-url }}
     steps:
       - uses: hqrEdu/ExampleCompositeAction@main
         id: deploystep
         with:
           deploy-name: dev
 
+  DeployStaging:
+    name: Deploy to Staging 
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Staging
+      url: ${{ steps.deploystep.outputs.deployment-url }}
+    steps:
+      - uses: hqrEdu/ExampleCompositeAction@main
+        id: deploystep
+        with:
+          deploy-name: staging
+
+  DeployProd:
+    name: Deploy to Production
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Production
+      url: ${{ steps.deploystep.outputs.deployment-url }}
+    steps:
+      - uses: hqrEdu/ExampleCompositeAction@main
+        id: deploystep
+        with:
+          deploy-name: prod
